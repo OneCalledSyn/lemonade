@@ -13,6 +13,7 @@ class LemonadeStandGame:
         self.cups = 0
         self.sugar = 0
         self.lemons = 0
+        self.ice = 0
         self.price_per_cup = 1.0
         self.weather = "Sunny"
 
@@ -20,7 +21,8 @@ class LemonadeStandGame:
         self.recipe = {
             "water": 1,
             "sugar": 1,
-            "lemons": 1
+            "lemons": 1,
+            "ice": 1
         }
 
         # Random events
@@ -36,7 +38,7 @@ class LemonadeStandGame:
 
         self.inventory_label = tk.Label(
             self.root,
-            text=f"Inventory - Water: {self.water}, Sugar: {self.sugar}, Lemons: {self.lemons}, Cups: {self.cups}"
+            text=f"Inventory - Water: {self.water}, Sugar: {self.sugar}, Lemons: {self.lemons}, Ice: {self.ice}, Cups: {self.cups}"
         )
         self.inventory_label.grid(row=1, column=0, columnspan=2, sticky="w")
 
@@ -46,34 +48,39 @@ class LemonadeStandGame:
         tk.Button(self.root, text="Buy Water ($0.50)", command=lambda: self.buy("water", 0.5)).grid(row=3, column=0, sticky="w")
         tk.Button(self.root, text="Buy Sugar ($0.25)", command=lambda: self.buy("sugar", 0.25)).grid(row=4, column=0, sticky="w")
         tk.Button(self.root, text="Buy Lemons ($0.75)", command=lambda: self.buy("lemons", 0.75)).grid(row=5, column=0, sticky="w")
-        tk.Button(self.root, text="Buy Cups ($0.10)", command=lambda: self.buy("cups", 0.10)).grid(row=6, column=0, sticky="w")
+        tk.Button(self.root, text="Buy Ice ($0.15)", command=lambda: self.buy("ice", 0.15)).grid(row=6, column=0, sticky="w")
+        tk.Button(self.root, text="Buy Cups ($0.10)", command=lambda: self.buy("cups", 0.10)).grid(row=7, column=0, sticky="w")
 
         # Set recipe and price
-        tk.Label(self.root, text="Set Recipe (units per cup):").grid(row=7, column=0, sticky="w")
+        tk.Label(self.root, text="Set Recipe (units per cup):").grid(row=8, column=0, sticky="w")
 
-        tk.Label(self.root, text="Water:").grid(row=8, column=0, sticky="w")
+        tk.Label(self.root, text="Water:").grid(row=9, column=0, sticky="w")
         self.water_entry = tk.Entry(self.root, width=5)
-        self.water_entry.grid(row=8, column=1, sticky="w")
+        self.water_entry.grid(row=9, column=1, sticky="w")
 
-        tk.Label(self.root, text="Sugar:").grid(row=9, column=0, sticky="w")
+        tk.Label(self.root, text="Sugar:").grid(row=10, column=0, sticky="w")
         self.sugar_entry = tk.Entry(self.root, width=5)
-        self.sugar_entry.grid(row=9, column=1, sticky="w")
+        self.sugar_entry.grid(row=10, column=1, sticky="w")
 
-        tk.Label(self.root, text="Lemons:").grid(row=10, column=0, sticky="w")
+        tk.Label(self.root, text="Lemons:").grid(row=11, column=0, sticky="w")
         self.lemons_entry = tk.Entry(self.root, width=5)
-        self.lemons_entry.grid(row=10, column=1, sticky="w")
+        self.lemons_entry.grid(row=11, column=1, sticky="w")
 
-        tk.Button(self.root, text="Set Recipe", command=self.set_recipe).grid(row=11, column=0, sticky="w")
+        tk.Label(self.root, text="Ice:").grid(row=12, column=0, sticky="w")
+        self.ice_entry = tk.Entry(self.root, width=5)
+        self.ice_entry.grid(row=12, column=1, sticky="w")
 
-        tk.Label(self.root, text="Set Price per Cup:").grid(row=12, column=0, sticky="w")
+        tk.Button(self.root, text="Set Recipe", command=self.set_recipe).grid(row=13, column=0, sticky="w")
+
+        tk.Label(self.root, text="Set Price per Cup:").grid(row=14, column=0, sticky="w")
         self.price_entry = tk.Entry(self.root, width=5)
-        self.price_entry.grid(row=12, column=1, sticky="w")
-        tk.Button(self.root, text="Set Price", command=self.set_price).grid(row=13, column=0, sticky="w")
+        self.price_entry.grid(row=14, column=1, sticky="w")
+        tk.Button(self.root, text="Set Price", command=self.set_price).grid(row=15, column=0, sticky="w")
 
         # Weather and simulate day
-        tk.Label(self.root, text=f"Today's Weather: {self.weather}").grid(row=14, column=0, sticky="w")
+        tk.Label(self.root, text=f"Today's Weather: {self.weather}").grid(row=16, column=0, sticky="w")
 
-        tk.Button(self.root, text="Simulate Day", command=self.simulate_day).grid(row=15, column=0, sticky="w")
+        tk.Button(self.root, text="Simulate Day", command=self.simulate_day).grid(row=17, column=0, sticky="w")
 
     def buy(self, item, cost):
         if self.cash >= cost:
@@ -88,6 +95,7 @@ class LemonadeStandGame:
             self.recipe["water"] = int(self.water_entry.get())
             self.recipe["sugar"] = int(self.sugar_entry.get())
             self.recipe["lemons"] = int(self.lemons_entry.get())
+            self.recipe["ice"] = int(self.ice_entry.get())
             messagebox.showinfo("Success", "Recipe updated!")
         except ValueError:
             messagebox.showerror("Error", "Please enter valid numbers for the recipe!")
@@ -116,10 +124,11 @@ class LemonadeStandGame:
             self.sugar = max(0, self.sugar - 5)
 
         for _ in range(customers):
-            if self.water >= self.recipe["water"] and self.sugar >= self.recipe["sugar"] and self.lemons >= self.recipe["lemons"] and self.cups > 0:
+            if self.water >= self.recipe["water"] and self.sugar >= self.recipe["sugar"] and self.lemons >= self.recipe["lemons"] and self.ice >= self.recipe["ice"] and self.cups > 0:
                 self.water -= self.recipe["water"]
                 self.sugar -= self.recipe["sugar"]
                 self.lemons -= self.recipe["lemons"]
+                self.ice -= self.recipe["ice"]
                 self.cups -= 1
                 self.cash += self.price_per_cup
                 cups_sold += 1
@@ -144,7 +153,7 @@ class LemonadeStandGame:
     def update_stats(self):
         self.stats_label.config(text=f"Cash: ${self.cash:.2f}")
         self.inventory_label.config(
-            text=f"Inventory - Water: {self.water}, Sugar: {self.sugar}, Lemons: {self.lemons}, Cups: {self.cups}"
+            text=f"Inventory - Water: {self.water}, Sugar: {self.sugar}, Lemons: {self.lemons}, Ice: {self.ice}, Cups: {self.cups}"
         )
 
 if __name__ == "__main__":
