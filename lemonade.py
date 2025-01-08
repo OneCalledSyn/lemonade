@@ -16,6 +16,7 @@ class LemonadeStandGame:
         self.ice = 0
         self.price_per_cup = 1.0
         self.weather = "Sunny"
+        self.day_counter = 0
 
         # Recipe
         self.recipe = {
@@ -42,45 +43,48 @@ class LemonadeStandGame:
         )
         self.inventory_label.grid(row=1, column=0, columnspan=2, sticky="w")
 
-        # Buying supplies
-        tk.Label(self.root, text="Buy Supplies:").grid(row=2, column=0, sticky="w")
+        self.day_label = tk.Label(self.root, text=f"Day: {self.day_counter}")
+        self.day_label.grid(row=2, column=0, columnspan=2, sticky="w")
 
-        tk.Button(self.root, text="Buy Water ($0.50)", command=lambda: self.buy("water", 0.5)).grid(row=3, column=0, sticky="w")
-        tk.Button(self.root, text="Buy Sugar ($0.25)", command=lambda: self.buy("sugar", 0.25)).grid(row=4, column=0, sticky="w")
-        tk.Button(self.root, text="Buy Lemons ($0.75)", command=lambda: self.buy("lemons", 0.75)).grid(row=5, column=0, sticky="w")
-        tk.Button(self.root, text="Buy Ice ($0.15)", command=lambda: self.buy("ice", 0.15)).grid(row=6, column=0, sticky="w")
-        tk.Button(self.root, text="Buy Cups ($0.10)", command=lambda: self.buy("cups", 0.10)).grid(row=7, column=0, sticky="w")
+        # Buying supplies
+        tk.Label(self.root, text="Buy Supplies:").grid(row=3, column=0, sticky="w")
+
+        tk.Button(self.root, text="Buy Water ($0.50)", command=lambda: self.buy("water", 0.5)).grid(row=4, column=0, sticky="w")
+        tk.Button(self.root, text="Buy Sugar ($0.25)", command=lambda: self.buy("sugar", 0.25)).grid(row=5, column=0, sticky="w")
+        tk.Button(self.root, text="Buy Lemons ($0.75)", command=lambda: self.buy("lemons", 0.75)).grid(row=6, column=0, sticky="w")
+        tk.Button(self.root, text="Buy Ice ($0.15)", command=lambda: self.buy("ice", 0.15)).grid(row=7, column=0, sticky="w")
+        tk.Button(self.root, text="Buy Cups ($0.10)", command=lambda: self.buy("cups", 0.10)).grid(row=8, column=0, sticky="w")
 
         # Set recipe and price
-        tk.Label(self.root, text="Set Recipe (units per cup):").grid(row=8, column=0, sticky="w")
+        tk.Label(self.root, text="Set Recipe (units per cup):").grid(row=9, column=0, sticky="w")
 
-        tk.Label(self.root, text="Water:").grid(row=9, column=0, sticky="w")
+        tk.Label(self.root, text="Water:").grid(row=10, column=0, sticky="w")
         self.water_entry = tk.Entry(self.root, width=5)
-        self.water_entry.grid(row=9, column=1, sticky="w")
+        self.water_entry.grid(row=10, column=1, sticky="w")
 
-        tk.Label(self.root, text="Sugar:").grid(row=10, column=0, sticky="w")
+        tk.Label(self.root, text="Sugar:").grid(row=11, column=0, sticky="w")
         self.sugar_entry = tk.Entry(self.root, width=5)
-        self.sugar_entry.grid(row=10, column=1, sticky="w")
+        self.sugar_entry.grid(row=11, column=1, sticky="w")
 
-        tk.Label(self.root, text="Lemons:").grid(row=11, column=0, sticky="w")
+        tk.Label(self.root, text="Lemons:").grid(row=12, column=0, sticky="w")
         self.lemons_entry = tk.Entry(self.root, width=5)
-        self.lemons_entry.grid(row=11, column=1, sticky="w")
+        self.lemons_entry.grid(row=12, column=1, sticky="w")
 
-        tk.Label(self.root, text="Ice:").grid(row=12, column=0, sticky="w")
+        tk.Label(self.root, text="Ice:").grid(row=13, column=0, sticky="w")
         self.ice_entry = tk.Entry(self.root, width=5)
-        self.ice_entry.grid(row=12, column=1, sticky="w")
+        self.ice_entry.grid(row=13, column=1, sticky="w")
 
-        tk.Button(self.root, text="Set Recipe", command=self.set_recipe).grid(row=13, column=0, sticky="w")
+        tk.Button(self.root, text="Set Recipe", command=self.set_recipe).grid(row=14, column=0, sticky="w")
 
-        tk.Label(self.root, text="Set Price per Cup:").grid(row=14, column=0, sticky="w")
+        tk.Label(self.root, text="Set Price per Cup:").grid(row=15, column=0, sticky="w")
         self.price_entry = tk.Entry(self.root, width=5)
-        self.price_entry.grid(row=14, column=1, sticky="w")
-        tk.Button(self.root, text="Set Price", command=self.set_price).grid(row=15, column=0, sticky="w")
+        self.price_entry.grid(row=15, column=1, sticky="w")
+        tk.Button(self.root, text="Set Price", command=self.set_price).grid(row=16, column=0, sticky="w")
 
         # Weather and simulate day
-        tk.Label(self.root, text=f"Today's Weather: {self.weather}").grid(row=16, column=0, sticky="w")
+        tk.Label(self.root, text=f"Today's Weather: {self.weather}").grid(row=17, column=0, sticky="w")
 
-        tk.Button(self.root, text="Simulate Day", command=self.simulate_day).grid(row=17, column=0, sticky="w")
+        tk.Button(self.root, text="Simulate Day", command=self.simulate_day).grid(row=18, column=0, sticky="w")
 
     def buy(self, item, cost):
         if self.cash >= cost:
@@ -108,6 +112,7 @@ class LemonadeStandGame:
             messagebox.showerror("Error", "Please enter a valid price!")
 
     def simulate_day(self):
+        self.day_counter += 1
         self.random_event = self.get_random_event()
         customers = random.randint(10, 30)
         cups_sold = 0
@@ -155,6 +160,7 @@ class LemonadeStandGame:
         self.inventory_label.config(
             text=f"Inventory - Water: {self.water}, Sugar: {self.sugar}, Lemons: {self.lemons}, Ice: {self.ice}, Cups: {self.cups}"
         )
+        self.day_label.config(text=f"Day: {self.day_counter}")
 
 if __name__ == "__main__":
     root = tk.Tk()
